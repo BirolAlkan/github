@@ -1,24 +1,34 @@
-import logo from './logo.svg';
 import './App.css';
+import Card from './Card';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+  const [info, setInfo] = useState([])
+const URL ="https://api.github.com/users/"
+  const getInfo= async(query) => {
+    try {
+      const {data} = await axios(`https://api.github.com/users/${query}`)
+      console.log(data)
+      setInfo(data)
+      
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  console.log(info)
+  useEffect(() => {
+    getInfo('BirolALkan')
+  },[])
+   return (
+    <div>
+      <h1>Github User Search App</h1>
+      <input type="Search" />
+      <button>Search</button>
+      <Card info={info} />
+    
     </div>
+
   );
 }
 
