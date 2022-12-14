@@ -3,11 +3,13 @@ import Card from './Card';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import githubresim from './img/githubresim.gif'
+import Notfound from './Notfound';
 function App() {
   const [info, setInfo] = useState([])
   const [value, setValue] = useState('')
-  console.log(info==true);
-  // const[error, setError] = useState(false)
+  // console.log(info==true);
+  const[error, setError] = useState(false)
+  // console.log(info.status);
 const URL ="https://api.github.com/users/"
   const getInfo= async(query) => {
     try {
@@ -16,10 +18,11 @@ const URL ="https://api.github.com/users/"
       setInfo(data)
       
     } catch (error) {
-      // setError(true)
+      setError(true)
       console.log(error);
+      console.log(error.response.status)
     }
-    // finally{setError(false)}
+    finally{setError(false)}
   }
   console.log(info)
   useEffect(() => {
@@ -29,9 +32,9 @@ const URL ="https://api.github.com/users/"
     e.preventDefault()
     getInfo(value)
   }
-  // if(error){
-  //   <img src={githubresim} alt="" />
-  // }
+  if(error?.response?.status===404){
+    return <Notfound/>
+  }
    return (
     <div>
       <h1>Github User Search App</h1>
@@ -39,9 +42,9 @@ const URL ="https://api.github.com/users/"
       <input value={value} onChange={(e) => setValue(e.target.value)} type="Search" />
       <button type='submit'>Search</button>  
       </form>
-      {
-        info.length>0 && <Card info={info} />
-      }      
+     {
+      info?.length!==0 && <Card info={info} />
+     }   
       
     </div>
 
